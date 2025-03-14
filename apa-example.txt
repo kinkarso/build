@@ -1,0 +1,208 @@
+# Reco: Requirements Document
+
+## 1. Introduction
+
+### Purpose
+The purpose of this document is to define the requirements for Reco, a private social platform designed for sharing authentic recommendations within trusted networks. Reco provides a secure environment for recommending places without the anxiety of public exposure.
+
+### Scope
+Reco will focus on sharing recommendations for places like restaurants and professional services.
+
+## 2. Project Overview
+
+### Problem Statement
+Public, large-scale review platforms often discourage fully honest feedback due to fear of backlash and wide visibility. Users need a trusted, private space where they can share real recommendations with an approved and known audience.
+
+### Objectives
+- Provide a private, trusted environment where users can share and discover recommendations.
+- Use a statement-based rating system to clarify the sentiment behind a rating.
+- Help users find places easily by location and name.
+- Encourage authentic interactions through a "Listening" model, allowing approved users to access each other's recommendations and activity.
+
+## 3. Functional Requirements
+
+### 3.1 User Registration and Authentication
+
+#### Sign-Up:
+- Users register with an email and password.
+
+#### Login:
+- Users can log in using email, phone number, or account tag (@username).
+
+#### Profile Setup:
+- Users provide their Name, Profile Picture, and unique Profile Tag (@username).
+
+### 3.2 User Profiles
+
+#### Profile Display:
+- Top section: Profile Picture, Name, and Profile Tag on the left.
+- On the right: Summary stats including Reviews Posted, Listening, and Listeners.
+- Below summary stats: Activity Stats (Likes Received, Comments Received).
+- All above info is publicly visible.
+
+#### Detailed Access Control:
+- Only approved "Listeners" (users who have been granted permission) can view the profile's detailed content such as the list of who the user is listening to, who their listeners are, and their reviews and comments.
+
+#### Edit Profile:
+- Profile owners can edit their Name, Profile Picture, and language settings.
+
+### 3.3 Listening
+
+#### Establishing a Listening Relationship:
+- To access another user's detailed recommendations, you must "Request to Listen" to that user.
+- The target user must approve or deny the request.
+
+#### Button States:
+- Before request: "Request to Listen".
+- After requesting: "Requested" (greyed out). Clicking it prompts to cancel the request.
+- After approval: "Listening" (greyed out). Clicking it prompts to stop listening.
+
+#### Terminology:
+- **Listening**: The number of users this person is approved to listen to.
+- **Listeners**: The number of users who are approved to listen to this person's recommendations.
+
+### 3.4 Content Sharing (Reviews)
+
+#### Creating Reviews:
+- User provides a place URL (Google Maps, Naver Map, Kakao Map, or Yelp).
+- If the URL is invalid, alert the user and clear the input. The user can retry or manually add place details.
+- If automatic extraction fails, alert the user to add place details manually (Name, Address).
+- User selects a statement-based rating and may add text, photos, videos, and tips.
+
+#### Preventing Duplicates:
+- System checks if the place already exists. If yes, link the review to it; if not, create a new place record.
+
+### 3.5 Statement-Based Rating System
+
+#### Ratings:
+- "Must Go" (5 stars)
+- "Worth It" (4 stars)
+- "Not Bad" (3 stars)
+- "Skip It" (2 stars)
+- "Hard Pass" (1 star)
+
+#### Numerical Equivalents:
+- Used internally for averaging and sorting by rating.
+
+### 3.6 Search and Discovery
+
+#### Search Page:
+- Accessible from bottom navigation bar.
+- Shows current region (via GPS) by default.
+
+#### Search Inputs:
+- Users can search by place name or address.
+
+#### Filtering & Sorting:
+- Filter by minimum rating.
+- Default sort by highest average rating.
+- Additional sort options: by distance or most recent reviews.
+
+### 3.7 Notifications
+
+#### Types of Notifications:
+- **ListeningRequest**: Another user requests to listen to your recommendations.
+- **NewReview**: A user you are listening to posts a new review.
+- **NewComment**: Someone comments on your review.
+- **NewLike**: Someone likes your review.
+- **Announcement**: Admin announcements.
+
+#### Display Structure:
+- Two main sections: "Requests" at the top and "Activities" below.
+- Requests: Show requestor's profile image, name, and tag with Accept/Deny buttons.
+- Activities: Show summary of events (e.g., for a new review: place name, rating statement, snippet).
+
+#### Marking as Read:
+- Visiting the Notifications page marks notifications as read.
+
+#### Language:
+- English only at launch.
+
+### 3.8 Activity Feed
+
+#### Content:
+- Shows recent activities (new reviews, comments, likes) from users you are listening to.
+
+#### Sorting:
+- Most recent activities appear first.
+
+### 3.9 Feedback Mechanism
+
+#### Submitting Feedback:
+- Accessible via a "Send Feedback" button on the user's Profile page.
+- Users can type feedback and attach images.
+
+#### Handling Feedback:
+- On submission, an email is sent to tim.chae+recofeedback@gmail.com with subject "Reco Feedback from [User Name] (@[Usertag])".
+- The email body includes user's name, @tag, timestamp, email, and the feedback text.
+- Show a "Thanks for the feedback!" alert to the user after submission.
+
+### 3.10 Basic Analytics
+
+#### Stats on Profile:
+- Reviews Posted
+- Listening (how many users you have approval to listen to)
+- Listeners (how many users listen to you)
+- Likes Received
+- Comments Received
+
+#### Access Control:
+- Detailed info only visible to approved Listeners.
+
+#### Purpose:
+- Encourages engagement and gives insight into user activity.
+
+## 4. UI/UX Design Suggestions
+
+### Overall "Look and Feel"
+Reco should exude a modern and sleek aesthetic, featuring a minimalist layout with ample whitespace, clean lines, and a refined color palette of neutral tones accented by a vibrant highlight color. Utilize Tailwind CSS for fluid, responsive styling that ensures precision in alignment and spacing, while shadcn UI components provide a consistent, high-quality user interface with crisp typography, subtle hover effects, and smooth transitions. The overall look should be contemporary and uncluttered, combining sharp visual elements with gentle animations to guide the user seamlessly through an elegant and intuitive digital experience.
+
+### Navigation:
+- Bottom navigation bar with tabs: Feed, Search, Add Review (+), Notifications, Profile.
+
+### Profile Page:
+- Layout resembling a Yelp-like profile, but mobile-first.
+
+### Consistent Design:
+- Consistent icons, typography, and layouts.
+
+### Modals & Alerts:
+- Use modals for confirming cancellation of requests or stopping listening.
+- Use toast/alerts for errors (e.g., invalid URL, extraction failures).
+
+## 5. User Flow Example
+
+### Sign Up:
+- User registers with email/password and @tag.
+
+### Set Up Profile:
+- Adds a profile picture and name.
+
+### Request to Listen:
+- Finds a friend's profile and taps "Request to Listen" → changes to "Requested".
+- Once approved, changes to "Listening".
+
+### Add a Review:
+- Taps "+" button, inputs a place URL.
+- If invalid or extraction fails, user is alerted and can manually add details.
+- Selects rating (e.g., "Not Bad"), adds photos, posts review.
+
+### Discover Recommendations:
+- Uses Search sorted by rating.
+
+### Interact:
+- Likes and comments on a review from a user they are listening to.
+
+### Notifications:
+- Checks new requests and activities in the Notifications tab.
+
+### Feedback:
+- Submits feedback, triggers an email to admin, sees a "Thanks!" alert.
+
+## 6. Data Privacy and Security
+- Strict access control ensures only Listeners see private content.
+
+## 7. Seed Example Data During Build and Test until Deployment
+Every new feature and corresponding database collection must include associated seed data. This sample data serves two purposes:
+- **Visual Verification**: Ensuring that new UI components render data as expected.
+- **Functional Testing**: Allowing automated tests to run against known datasets for consistent validation.
